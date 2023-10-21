@@ -22,7 +22,7 @@ namespace Application.Products.CreateProduct
                 Color = request.Color
             };
             await _productRepository.CreateProduct(res, cancellationToken);
-            Sender.Send("Product Created");
+            //Sender.Send("Product Created");
             return res;
         }
     }

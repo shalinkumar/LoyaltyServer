@@ -1,23 +1,37 @@
 ﻿using Application.Products;
 using Application.Products.Model;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Infrastructure.Database.DataAccess
 {
     public class ProductRepository : IProductRepository
     {
-        public string ConnectionString = "mongodb://localhost:27017/";
+        public string ConnectionString = "mongodb+srv://sayhi2shalin:9nQp8PjePkcEZitL@cluster0.cvloioj.mongodb.net/?retryWrites=true&w=majority";
         public string DataBaseName = "LoyaltyDb";
         public string ProductCollection = "ProductCollection";
-        public string Collection = "Users";
-        public string ChoreHistoryCollection = "ChoreHistory";
-
-
+       
         public IMongoCollection<T> ConnectToMongo<T>(in string collection)
         {
+            
+            var settings = MongoClientSettings.FromConnectionString(ConnectionString);
+            
+            // Set the ServerApi field of the settings object to Stable API version 1
+            settings.ServerApi = new ServerApi(ServerApiVersion.V1);
             var client = new MongoClient(ConnectionString);
-            var db = client.GetDatabase(DataBaseName);
-            return db.GetCollection<T>(collection);
+            
+            try
+            {
+                //var result = client.GetDatabase(DataBaseName).RunCommand<BsonDocument>(new BsonDocument("ping", 1));
+                var result = client.GetDatabase(DataBaseName);
+                Console.WriteLine("Pinged your deployment. You successfully connected to MongoDB!");
+                return result.GetCollection<T>(collection);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            return null;
         }
 
         public async Task<List<ProductModel>> GetAllProducts(CancellationToken token)

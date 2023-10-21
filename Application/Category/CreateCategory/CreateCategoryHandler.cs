@@ -19,7 +19,7 @@ namespace Application.Category.CreateCategory
                 Description = request.Description
             };
             await _categoryRepository.CreateCategory(res, cancellationToken);
-            Sender.Send("Category Created");
+            //Sender.Send("Category Created");
             return res;
         }
     }
