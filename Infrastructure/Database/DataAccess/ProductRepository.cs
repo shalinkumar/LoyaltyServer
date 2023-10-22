@@ -1,5 +1,6 @@
 ﻿using Application.Products;
 using Application.Products.Model;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -7,10 +8,20 @@ namespace Infrastructure.Database.DataAccess
 {
     public class ProductRepository : IProductRepository
     {
-        public string ConnectionString = "mongodb+srv://sayhi2shalin:9nQp8PjePkcEZitL@cluster0.cvloioj.mongodb.net/?retryWrites=true&w=majority";
-        public string DataBaseName = "LoyaltyDb";
-        public string ProductCollection = "ProductCollection";
-       
+        private readonly IConfiguration _configuration;
+        private string ConnectionString = string.Empty;
+        private string DataBaseName = string.Empty;
+        private string ProductCollection = string.Empty;
+
+        public ProductRepository(IConfiguration configuration)
+        {
+            _configuration = configuration;
+
+            ConnectionString = _configuration.GetConnectionString("DefaultConnection") ?? "";
+            DataBaseName = _configuration.GetConnectionString("DataBaseName") ?? "";
+            ProductCollection = _configuration.GetConnectionString("ProductCollection") ?? "";
+        }
+
         public IMongoCollection<T> ConnectToMongo<T>(in string collection)
         {
             

@@ -24,7 +24,7 @@ namespace Application.Products.UpdateProduct
                 Color = request.Color
             };
             await _productRepository.UpdateProduct(res, cancellationToken);
-            //Sender.Send("Product Updated");
+            Sender.Send("Product Updated");
             return res;
         }
     }

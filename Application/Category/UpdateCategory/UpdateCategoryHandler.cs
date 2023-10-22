@@ -20,7 +20,7 @@ namespace Application.Category.UpdateCategory
                 Description = request.Description
             };
             await _categoryRepository.UpdateCategory(res, cancellationToken);
-            //Sender.Send("Category Updated");
+            Sender.Send("Category Updated");
             return res;
         }
     }

@@ -1,16 +1,31 @@
 ﻿using Application.Category;
 using Application.Category.Model;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
+using MongoDB.Driver.Core.Configuration;
+using System.Text.Json;
+using System;
 
 namespace Infrastructure.Database.DataAccess
 {
     public class CategoryRepository : ICategoryRepository
     {
 
-        public string ConnectionString = "mongodb+srv://sayhi2shalin:9nQp8PjePkcEZitL@cluster0.cvloioj.mongodb.net/?retryWrites=true&w=majority";
-        public string DataBaseName = "LoyaltyDb";
-        public string CategoryCollection = "CategoryCollection";
+        private readonly IConfiguration _configuration;
+        private string ConnectionString = string.Empty;
+        private string DataBaseName = string.Empty;
+        private string CategoryCollection = string.Empty;
 
+        public CategoryRepository(IConfiguration configuration)
+        {
+            _configuration = configuration;
+
+
+            ConnectionString = _configuration.GetConnectionString("DefaultConnection") ?? "";
+            DataBaseName = _configuration.GetConnectionString("DataBaseName") ?? "";
+            CategoryCollection = _configuration.GetConnectionString("CategoryCollection") ?? "";
+
+        }
 
         public IMongoCollection<T> ConnectToMongo<T>(in string collection)
         {
